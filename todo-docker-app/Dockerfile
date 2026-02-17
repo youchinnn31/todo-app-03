@@ -1,11 +1,27 @@
-FROM node:22.20.0-alpine
+FROM node:22.20.0-alpine as deps
+
+WORKDIR /app
+
+COPY package*.json .
+
+RUN npm install
+
+#BUILD環境
+FROM node:22.20.0-alpine as builder
 
 WORKDIR /app
 
 COPY . .
 
-RUN npm install
+COPY --from=deps /app/node_modules ./node_modules
 
-EXPOSE 5173
+RUN npm run build
 
-CMD ["npm","run","dev","--","--host","0.0.0.0"]
+#実行環境
+FROM nginx:alpine
+
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+EXPOSE 80
+
+CMD ["nginx","-g","daemon off;"]
