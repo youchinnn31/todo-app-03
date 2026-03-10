@@ -3,26 +3,20 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-      target: dev
+      target: production
     container_name: hono-backend
     ports:
       - "${BACKEND_PORT}:3000" 
-    volumes:
-      - ./backend:/app
-      - /app/node_modules
     env_file:
       - .env
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-      target: dev
+      target: production
     container_name: react-frontend
     ports:
-      - "${FRONTEND_PORT}:5173"
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
+      - "80:80"
     env_file:
       - .env
 
