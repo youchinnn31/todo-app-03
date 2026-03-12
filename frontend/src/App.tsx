@@ -4,7 +4,7 @@ interface Todo {
   id: number;
   title: string;
   completed: boolean;
-};
+}
 
 function App() {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -14,14 +14,14 @@ function App() {
     const fetchTodos = async () => {
       const response = await fetch("http://localhost:3000/todos");
       const data = await response.json();
-       setTodos(data.todos);
+      setTodos(data.todos);
     };
     fetchTodos();
   }, []);
 
   const handleAddTodo = async () => {
     if (title.trim()) {
-      await fetch("http://localhost:3000/todos",{
+      await fetch("http://localhost:3000/todos", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -37,22 +37,22 @@ function App() {
     const targetTodo = todos.find((todo) => todo.id === id);
     const completedStatus = !targetTodo.completed;
     const targetTodoId = targetTodo.id;
-    try{
-      await fetch(`http://localhost:3000/todos/${targetTodoId}`,{
+    try {
+      await fetch(`http://localhost:3000/todos/${targetTodoId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ completed: completedStatus })
+        body: JSON.stringify({ completed: completedStatus }),
       });
 
       setTodos(
         todos.map((todo) =>
-          todo.id === id ? { ...todo, completed: !todo.completed } : todo
-         )
-       );
-    }catch(err) {
-      console.error(error);
+          todo.id === id ? { ...todo, completed: !todo.completed } : todo,
+        ),
+      );
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -133,4 +133,3 @@ function App() {
 }
 
 export default App;
-
