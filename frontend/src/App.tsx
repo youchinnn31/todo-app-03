@@ -11,28 +11,49 @@ function App() {
   const [title, setTitle] = useState("");
 
   useEffect(() => {
+    const fetchTodos = async () => {
+      const response = await fetch("http://localhost:3000/todos");
+      const data = await response.json();
+       setTodos(data.todos);
+    };
     fetchTodos();
   }, []);
 
-  const fetchTodos = async () => {
-    const response = await fetch("http://localhost:3000/todos");
-    const data = await response.json();
-    setTodos(data.todos);
-  };
-
-  const handleAddTodo = () => {
+  const handleAddTodo = async () => {
     if (title.trim()) {
+      await fetch("http://localhost:3000/todos",{
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ title: title }),
+      });
       setTodos([...todos, { id: todos.length + 1, title, completed: false }]);
       setTitle("");
     }
   };
 
-  const handleToggleTodo = (id: number) => {
-    setTodos(
-      todos.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
-      )
-    );
+  const handleToggleTodo = async (id: number) => {
+    const targetTodo = todos.find((todo) => todo.id === id);
+    const completedStatus = !targetTodo.completed;
+    const targetTodoId = targetTodo.id;
+    try{
+      await fetch(`http://localhost:3000/todos/${targetTodoId}`,{
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ completed: completedStatus })
+      });
+
+      setTodos(
+        todos.map((todo) =>
+          todo.id === id ? { ...todo, completed: !todo.completed } : todo
+         )
+       );
+    }catch(err) {
+      console.error(error);
+    }
   };
 
   return (
