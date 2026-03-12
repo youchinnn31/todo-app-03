@@ -1,14 +1,7 @@
 import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
 import { cors } from "hono/cors"
-
-interface Todo{
-  id:number;
-  title:string;
-  completed:boolean;
-}
-
-const todos: Todo[] = [];
+import {prisma} from "../lib/prisma";
 
 const app = new Hono()
 
@@ -25,30 +18,30 @@ app.get('/', (c) => {
   return c.text('Hello Hono!')
 })
 
-app.get("/todos",(c) => {
+app.get("/todos",async (c) => {
+  const todos = await prisma.todo.findMany();
   return c.json({todos});
 });
 
 app.post("/todos",async (c) => {
   const {title} = await c.req.json();
-  const todo:Todo = {
-    id:todos.length + 1,
-    title,
-    completed:false,
-  };
-  todos.push(todo);
-  return c.json({todo});
+  const todo = await prisma.todo.create({
+    data: {
+      title: title,
+    },
+  });
+  return c.json(todo);
 })
 
 app.put("/todos/:id",async (c) => {
   const {id} = c.req.param();
+  const paramId = parseInt(id,10);
   const { completed } = await c.req.json();
-  const todo = todos.find((todo) => todo.id === Number(id));
-  if(!todo) {
-    return c.notFound();
-  }
-  todo.completed = completed;
-  return c.json({todo});
+  const updateTodo = await prisma.todo.update({
+    where: { id: paramId },
+    data: { completed: completed},
+  });
+  return c.json({updateTodo});
 });
 
 serve({

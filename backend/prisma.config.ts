@@ -2,16 +2,6 @@
 // npm install --save-dev prisma dotenv
 import "dotenv/config";
 import { defineConfig } from "prisma/config";
-import * as dotenv from 'dotenv';
-import { fileURLToPath } from 'url';
-import path from 'path';
-
-// 1. 現在のモジュールのURLからファイルパスを取得し、ディレクトリパスを算出する
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// 2. path.resolve() を使用して、親ディレクトリの .env ファイルの絶対パスを生成し、ロードする
-dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 export default defineConfig({
   schema: "prisma/schema.prisma",
