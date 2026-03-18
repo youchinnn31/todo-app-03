@@ -7,7 +7,7 @@ const app = new Hono();
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://localhost"],
+    origin: ["http://localhost:3000", "http://localhost"],
   }),
 );
 
@@ -16,13 +16,13 @@ app.get("/", (c) => {
 });
 
 app.get("/todos", async (c) => {
-  const todos = await prisma.todo.findMany();
+  const todos = await prisma.Todo.findMany();
   return c.json({ todos });
 });
 
 app.post("/todos", async (c) => {
   const { title } = await c.req.json();
-  const todo = await prisma.todo.create({
+  const todo = await prisma.Todo.create({
     data: {
       title: title,
     },

@@ -14,14 +14,14 @@ services:
       - .env
   frontend:
     build:
-      context: ./frontend
+      context: ./next-frontend
       dockerfile: Dockerfile
       target: dev
     container_name: react-frontend
     ports:
-      - "${FRONTEND_PORT}:5173"
+      - "${FRONTEND_PORT}:3000"
     volumes:
-      - ./frontend:/app
+      - ./next-frontend:/app
       - /app/node_modules
     env_file:
       - .env

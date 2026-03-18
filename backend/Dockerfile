@@ -32,7 +32,7 @@ COPY --from=builder --chown=node:node /app/node_modules ./node_modules
 
 COPY --from=builder --chown=node:node /app/dist ./dist
 
-EXPOSE 3000
+EXPOSE 300030003000
 
 CMD ["node","dist/index.js"]
 
@@ -46,6 +46,12 @@ COPY --chown=node:node package*.json ./
 
 RUN npm ci
 
+COPY --chown=node:node prisma ./prisma
+
+RUN npx prisma generate
+
 COPY --chown=node:node . .
+
+EXPOSE 3000
 
 CMD ["npm","run","dev"]
