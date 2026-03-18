@@ -32,7 +32,7 @@ COPY --from=builder --chown=node:node /app/node_modules ./node_modules
 
 COPY --from=builder --chown=node:node /app/dist ./dist
 
-EXPOSE 300030003000
+EXPOSE 3001
 
 CMD ["node","dist/index.js"]
 
@@ -52,6 +52,6 @@ RUN npx prisma generate
 
 COPY --chown=node:node . .
 
-EXPOSE 3000
+EXPOSE 3001
 
 CMD ["npm","run","dev"]
