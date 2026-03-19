@@ -22,7 +22,7 @@ export default async function Home() {
       <div className="max-w-md mx-auto">
         <div className="bg-white rounded-lg shadow-lg p-6">
           <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">
-            📝 Todoアプリ!
+            📝 Todoアプリ
           </h1>
           {/* 「追加・完了」などのユーザー操作が必要な部分は、
             状態管理が必要なため、ここから下を Client Component に切り出します 

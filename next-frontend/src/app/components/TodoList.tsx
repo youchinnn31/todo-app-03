@@ -46,6 +46,22 @@ export default function TodoList({ initialTodos }: { initialTodos: Todo[] }) {
     }
   };
   
+  const handleDeleteTodo = async (id: number) => {
+    const target = todos.find((t) => t.id === id);
+    if(!target) return;
+    try{
+      await fetch(`${API_URL}/${id}`, {
+        method: "DELETE"
+      });
+
+      setTodos(
+        todos.filter((todo) => todo.id !== id)
+      );
+    }catch(err) { 
+      console.log(err);
+    }
+  };
+  
   return (
     <>
       <div className="flex gap-2 mb-6">
@@ -83,6 +99,12 @@ export default function TodoList({ initialTodos }: { initialTodos: Todo[] }) {
             >
               {todo.title}
             </span>
+            <button
+              onClick = {() => handleDeleteTodo(todo.id)}
+              className="ml-auto px-3 py-1 text-sm font-medium text-red-600 hover:bg-red-50 rounded-md transition-colors"
+            >
+              削除
+            </button>
           </li>
         ))}
       </ul>

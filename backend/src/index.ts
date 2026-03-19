@@ -41,6 +41,15 @@ app.put("/todos/:id", async (c) => {
   return c.json({ updateTodo });
 });
 
+app.delete("/todos/:id", async(c) => {
+  const {id} = c.req.param();
+  const paramId = parseInt(id,10);
+  const deleteTodo = await prisma.todo.delete({
+    where: {id: paramId},
+  });
+  return c.json({deleteTodo});
+});
+
 serve(
   {
     fetch: app.fetch,
