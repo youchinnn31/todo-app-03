@@ -1,0 +1,16 @@
+name: CI/CD
+on: [push]
+jobs:
+  next-frontend-ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+      - name: Install dependencies
+        run: npm ci --prefix ./next-frontend
+      - name: Lint
+        run: npm run lint --prefix ./next-frontend
+      - name: Prettier
+        run: npm run fix --prefix ./next-frontend
