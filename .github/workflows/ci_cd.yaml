@@ -1,0 +1,17 @@
+name: CI/CD
+on: [push]
+jobs:
+  next-frontend-ci:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: next-frontend
+    steps:
+      - uses: actions/checkout@v6
+      - name: Build development image
+        run: docker build --target dev -t test-front .
+      - name: Lint & Format check
+        run: docker run --rm test-front npm run lint
+      - name: Build app
+        run: docker build --target builder -t build-front .
+      
